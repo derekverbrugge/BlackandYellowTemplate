@@ -902,3 +902,79 @@ h3 {
   }
 
 }
+
+/* MORE TOPICS */
+
+.more-topics {
+
+  display: none;
+
+  grid-column: 1 / -1;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 16px;
+
+}
+
+
+.more-topics.is-visible {
+
+  display: grid;
+
+}
+
+
+.more-button {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  width: 100%;
+
+  margin-top: 28px;
+
+  padding: 13px;
+
+  border: 0;
+
+  border-bottom:
+    1px solid var(--border);
+
+  background: transparent;
+
+  color: var(--yellow);
+
+  cursor: pointer;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: .08em;
+
+  text-transform: uppercase;
+
+}
+
+
+.more-button:hover {
+
+  color: var(--yellow-light);
+
+}
+
+
+.more-arrow {
+
+  font-size: 18px;
+
+  line-height: 1;
+
+}
