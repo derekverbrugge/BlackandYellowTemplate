@@ -1,2 +1,4 @@
-# BlackandYellowTemplate
-https://derekverbrugge.github.io/BlackandYellowTemplate/
+# MotoristTemplate
+https://derekverbrugge.github.io/MotoristTemplate/
+
+Dark, Yellow
