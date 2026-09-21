@@ -1,96 +1,113 @@
-document.addEventListener("DOMContentLoaded", async () => {
-
-  await loadHeader();
-  await loadFooter();
-
-  initializeNavigation();
-  initializeMoreTopics();
-  initializeCopyright();
-
-});
-
-
 /*
- * Load header
+ * Motorists
+ * Main site JavaScript
+ *
+ * Loaded with:
+ * <script src="./script.js" defer></script>
  */
 
-async function loadHeader() {
 
-  const header =
-    document.getElementById("site-header");
+/* ================================
+   HEADER
+   ================================= */
 
-  if (!header) {
-    return;
-  }
+const headerContainer =
+  document.getElementById("site-header");
 
-  try {
 
-    const response =
-      await fetch("header.html");
+if (headerContainer) {
 
-    if (!response.ok) {
-      throw new Error(
-        `Header request failed: ${response.status}`
+  fetch("./header.html")
+
+    .then(response => {
+
+      if (!response.ok) {
+        throw new Error(
+          `Could not load header.html (${response.status})`
+        );
+      }
+
+      return response.text();
+
+    })
+
+    .then(html => {
+
+      headerContainer.innerHTML = html;
+
+      initializeNavigation();
+
+    })
+
+    .catch(error => {
+
+      console.error(
+        "Header loading error:",
+        error
       );
-    }
 
-    header.innerHTML =
-      await response.text();
-
-  } catch (error) {
-
-    console.error(
-      "Unable to load header.html:",
-      error
-    );
-
-  }
+    });
 
 }
 
 
-/*
- * Load footer
- */
+/* ================================
+   FOOTER
+   ================================= */
 
-async function loadFooter() {
+const footerContainer =
+  document.getElementById("site-footer");
 
-  const footer =
-    document.getElementById("site-footer");
 
-  if (!footer) {
-    return;
-  }
+if (footerContainer) {
 
-  try {
+  fetch("./footer.html")
 
-    const response =
-      await fetch("footer.html");
+    .then(response => {
 
-    if (!response.ok) {
-      throw new Error(
-        `Footer request failed: ${response.status}`
+      if (!response.ok) {
+        throw new Error(
+          `Could not load footer.html (${response.status})`
+        );
+      }
+
+      return response.text();
+
+    })
+
+    .then(html => {
+
+      footerContainer.innerHTML = html;
+
+      const year =
+        document.getElementById(
+          "copyright-year"
+        );
+
+      if (year) {
+
+        year.textContent =
+          new Date().getFullYear();
+
+      }
+
+    })
+
+    .catch(error => {
+
+      console.error(
+        "Footer loading error:",
+        error
       );
-    }
 
-    footer.innerHTML =
-      await response.text();
-
-  } catch (error) {
-
-    console.error(
-      "Unable to load footer.html:",
-      error
-    );
-
-  }
+    });
 
 }
 
 
-/*
- * Mobile navigation
- */
+/* ================================
+   MOBILE NAVIGATION
+   ================================= */
 
 function initializeNavigation() {
 
@@ -106,137 +123,118 @@ function initializeNavigation() {
   }
 
 
-  menuToggle.addEventListener("click", () => {
+  menuToggle.addEventListener(
+    "click",
+    () => {
 
-    const isOpen =
-      mainNav.classList.toggle("is-open");
-
-
-    menuToggle.setAttribute(
-      "aria-expanded",
-      String(isOpen)
-    );
+      const isOpen =
+        mainNav.classList.toggle(
+          "is-open"
+        );
 
 
-    menuToggle.setAttribute(
-      "aria-label",
-      isOpen
-        ? "Close navigation"
-        : "Open navigation"
-    );
+      menuToggle.setAttribute(
+        "aria-expanded",
+        String(isOpen)
+      );
 
-  });
+
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen
+          ? "Close navigation"
+          : "Open navigation"
+      );
+
+    }
+  );
 
 
   mainNav
     .querySelectorAll("a")
     .forEach(link => {
 
-      link.addEventListener("click", () => {
+      link.addEventListener(
+        "click",
+        () => {
 
-        mainNav.classList.remove(
-          "is-open"
-        );
+          mainNav.classList.remove(
+            "is-open"
+          );
 
-        menuToggle.setAttribute(
-          "aria-expanded",
-          "false"
-        );
+          menuToggle.setAttribute(
+            "aria-expanded",
+            "false"
+          );
 
-        menuToggle.setAttribute(
-          "aria-label",
-          "Open navigation"
-        );
+          menuToggle.setAttribute(
+            "aria-label",
+            "Open navigation"
+          );
 
-      });
+        }
+      );
 
     });
 
 }
 
 
-/*
- * More topics
- */
+/* ================================
+   MORE TOPICS
+   ================================= */
 
-function initializeMoreTopics() {
+const moreButton =
+  document.getElementById("more-button");
 
-  const moreButton =
-    document.getElementById("more-button");
-
-  const moreTopics =
-    document.getElementById("more-topics");
+const moreTopics =
+  document.getElementById("more-topics");
 
 
-  if (!moreButton || !moreTopics) {
-    return;
-  }
+if (moreButton && moreTopics) {
+
+  moreButton.addEventListener(
+    "click",
+    () => {
+
+      const isVisible =
+        moreTopics.classList.toggle(
+          "is-visible"
+        );
 
 
-  moreButton.addEventListener("click", () => {
-
-    const isVisible =
-      moreTopics.classList.toggle(
-        "is-visible"
+      moreButton.setAttribute(
+        "aria-expanded",
+        String(isVisible)
       );
 
 
-    moreButton.setAttribute(
-      "aria-expanded",
-      String(isVisible)
-    );
+      const buttonText =
+        moreButton.querySelector(
+          "span:first-child"
+        );
+
+      const arrow =
+        moreButton.querySelector(
+          ".more-arrow"
+        );
 
 
-    const buttonText =
-      moreButton.querySelector(
-        "span:first-child"
-      );
+      if (isVisible) {
 
-    const arrow =
-      moreButton.querySelector(
-        ".more-arrow"
-      );
+        buttonText.textContent = "Less";
 
+        arrow.textContent = "↑";
 
-    if (isVisible) {
+      } else {
 
-      buttonText.textContent =
-        "Less";
+        buttonText.textContent = "More";
 
-      arrow.textContent =
-        "↑";
+        arrow.textContent = "↓";
 
-    } else {
-
-      buttonText.textContent =
-        "More";
-
-      arrow.textContent =
-        "↓";
+      }
 
     }
-
-  });
-
-}
-
-
-/*
- * Copyright year
- */
-
-function initializeCopyright() {
-
-  const year =
-    document.getElementById(
-      "copyright-year"
-    );
-
-  if (year) {
-
-    year.textContent =
-      new Date().getFullYear();
-
-  }
+  );
 
 }
