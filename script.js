@@ -21,7 +21,7 @@ async function loadComponents() {
     try {
 
       const response =
-        await fetch("./header.html");
+        await fetch("header.html");
 
       if (!response.ok) {
         throw new Error(
@@ -53,7 +53,7 @@ async function loadComponents() {
     try {
 
       const response =
-        await fetch("./footer.html");
+        await fetch("footer.html");
 
       if (!response.ok) {
         throw new Error(
