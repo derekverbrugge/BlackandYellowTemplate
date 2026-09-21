@@ -1,8 +1,11 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-  loadHeader();
-  loadFooter();
+  await loadHeader();
+  await loadFooter();
+
+  initializeNavigation();
   initializeMoreTopics();
+  initializeCopyright();
 
 });
 
@@ -11,45 +14,37 @@ document.addEventListener("DOMContentLoaded", () => {
  * Load header
  */
 
-function loadHeader() {
+async function loadHeader() {
 
-  fetch("header.html")
+  const header =
+    document.getElementById("header");
 
-    .then(response => {
+  if (!header) {
+    return;
+  }
 
-      if (!response.ok) {
-        throw new Error(
-          `Header request failed: ${response.status}`
-        );
-      }
+  try {
 
-      return response.text();
+    const response =
+      await fetch("header.html");
 
-    })
-
-    .then(data => {
-
-      const header =
-        document.getElementById("header");
-
-      if (!header) {
-        return;
-      }
-
-      header.innerHTML = data;
-
-      initializeNavigation();
-
-    })
-
-    .catch(error => {
-
-      console.error(
-        "Unable to load header:",
-        error
+    if (!response.ok) {
+      throw new Error(
+        `Header request failed: ${response.status}`
       );
+    }
 
-    });
+    header.innerHTML =
+      await response.text();
+
+  } catch (error) {
+
+    console.error(
+      "Unable to load header.html:",
+      error
+    );
+
+  }
 
 }
 
@@ -58,51 +53,37 @@ function loadHeader() {
  * Load footer
  */
 
-function loadFooter() {
+async function loadFooter() {
 
-  fetch("footer.html")
+  const footer =
+    document.getElementById("footer");
 
-    .then(response => {
+  if (!footer) {
+    return;
+  }
 
-      if (!response.ok) {
-        throw new Error(
-          `Footer request failed: ${response.status}`
-        );
-      }
+  try {
 
-      return response.text();
+    const response =
+      await fetch("footer.html");
 
-    })
-
-    .then(data => {
-
-      const footer =
-        document.getElementById("footer");
-
-      if (!footer) {
-        return;
-      }
-
-      footer.innerHTML = data;
-
-      const year =
-        document.getElementById("copyright-year");
-
-      if (year) {
-        year.textContent =
-          new Date().getFullYear();
-      }
-
-    })
-
-    .catch(error => {
-
-      console.error(
-        "Unable to load footer:",
-        error
+    if (!response.ok) {
+      throw new Error(
+        `Footer request failed: ${response.status}`
       );
+    }
 
-    });
+    footer.innerHTML =
+      await response.text();
+
+  } catch (error) {
+
+    console.error(
+      "Unable to load footer.html:",
+      error
+    );
+
+  }
 
 }
 
@@ -147,18 +128,15 @@ function initializeNavigation() {
   });
 
 
-  /*
-   * Close the mobile navigation
-   * when a navigation link is selected.
-   */
-
   mainNav
     .querySelectorAll("a")
     .forEach(link => {
 
       link.addEventListener("click", () => {
 
-        mainNav.classList.remove("is-open");
+        mainNav.classList.remove(
+          "is-open"
+        );
 
         menuToggle.setAttribute(
           "aria-expanded",
@@ -222,18 +200,43 @@ function initializeMoreTopics() {
 
     if (isVisible) {
 
-      buttonText.textContent = "Less";
+      buttonText.textContent =
+        "Less";
 
-      arrow.textContent = "↑";
+      arrow.textContent =
+        "↑";
 
     } else {
 
-      buttonText.textContent = "More";
+      buttonText.textContent =
+        "More";
 
-      arrow.textContent = "↓";
+      arrow.textContent =
+        "↓";
 
     }
 
   });
+
+}
+
+
+/*
+ * Copyright year
+ */
+
+function initializeCopyright() {
+
+  const year =
+    document.getElementById(
+      "copyright-year"
+    );
+
+  if (year) {
+
+    year.textContent =
+      new Date().getFullYear();
+
+  }
 
 }
