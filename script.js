@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function loadHeader() {
 
   const header =
-    document.getElementById("header");
+    document.getElementById("site-header");
 
   if (!header) {
     return;
@@ -56,7 +56,7 @@ async function loadHeader() {
 async function loadFooter() {
 
   const footer =
-    document.getElementById("footer");
+    document.getElementById("site-footer");
 
   if (!footer) {
     return;
