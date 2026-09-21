@@ -1,113 +1,96 @@
 /*
  * Motorists
  * Main site JavaScript
- *
- * Loaded with:
- * <script src="./script.js" defer></script>
  */
 
+async function loadComponents() {
 
-/* ================================
-   HEADER
-   ================================= */
+  const headerContainer =
+    document.getElementById("site-header");
 
-const headerContainer =
-  document.getElementById("site-header");
+  const footerContainer =
+    document.getElementById("site-footer");
 
 
-if (headerContainer) {
+  /*
+   * Load header
+   */
 
-  fetch("./header.html")
+  if (headerContainer) {
 
-    .then(response => {
+    try {
+
+      const response =
+        await fetch("./header.html");
 
       if (!response.ok) {
         throw new Error(
-          `Could not load header.html (${response.status})`
+          `Header returned ${response.status}`
         );
       }
 
-      return response.text();
+      headerContainer.innerHTML =
+        await response.text();
 
-    })
-
-    .then(html => {
-
-      headerContainer.innerHTML = html;
-
-      initializeNavigation();
-
-    })
-
-    .catch(error => {
+    } catch (error) {
 
       console.error(
-        "Header loading error:",
+        "Unable to load header.html:",
         error
       );
 
-    });
+    }
+
+  }
+
+
+  /*
+   * Load footer
+   */
+
+  if (footerContainer) {
+
+    try {
+
+      const response =
+        await fetch("./footer.html");
+
+      if (!response.ok) {
+        throw new Error(
+          `Footer returned ${response.status}`
+        );
+      }
+
+      footerContainer.innerHTML =
+        await response.text();
+
+    } catch (error) {
+
+      console.error(
+        "Unable to load footer.html:",
+        error
+      );
+
+    }
+
+  }
+
+
+  /*
+   * Components now exist in the DOM,
+   * so initialize their functionality.
+   */
+
+  initializeNavigation();
+  initializeMoreTopics();
+  initializeCopyright();
 
 }
 
 
-/* ================================
-   FOOTER
-   ================================= */
-
-const footerContainer =
-  document.getElementById("site-footer");
-
-
-if (footerContainer) {
-
-  fetch("./footer.html")
-
-    .then(response => {
-
-      if (!response.ok) {
-        throw new Error(
-          `Could not load footer.html (${response.status})`
-        );
-      }
-
-      return response.text();
-
-    })
-
-    .then(html => {
-
-      footerContainer.innerHTML = html;
-
-      const year =
-        document.getElementById(
-          "copyright-year"
-        );
-
-      if (year) {
-
-        year.textContent =
-          new Date().getFullYear();
-
-      }
-
-    })
-
-    .catch(error => {
-
-      console.error(
-        "Footer loading error:",
-        error
-      );
-
-    });
-
-}
-
-
-/* ================================
-   MOBILE NAVIGATION
-   ================================= */
+/*
+ * Mobile navigation
+ */
 
 function initializeNavigation() {
 
@@ -180,18 +163,23 @@ function initializeNavigation() {
 }
 
 
-/* ================================
-   MORE TOPICS
-   ================================= */
+/*
+ * More topics
+ */
 
-const moreButton =
-  document.getElementById("more-button");
+function initializeMoreTopics() {
 
-const moreTopics =
-  document.getElementById("more-topics");
+  const moreButton =
+    document.getElementById("more-button");
+
+  const moreTopics =
+    document.getElementById("more-topics");
 
 
-if (moreButton && moreTopics) {
+  if (!moreButton || !moreTopics) {
+    return;
+  }
+
 
   moreButton.addEventListener(
     "click",
@@ -223,13 +211,11 @@ if (moreButton && moreTopics) {
       if (isVisible) {
 
         buttonText.textContent = "Less";
-
         arrow.textContent = "↑";
 
       } else {
 
         buttonText.textContent = "More";
-
         arrow.textContent = "↓";
 
       }
@@ -238,3 +224,32 @@ if (moreButton && moreTopics) {
   );
 
 }
+
+
+/*
+ * Copyright year
+ */
+
+function initializeCopyright() {
+
+  const year =
+    document.getElementById(
+      "copyright-year"
+    );
+
+
+  if (year) {
+
+    year.textContent =
+      new Date().getFullYear();
+
+  }
+
+}
+
+
+/*
+ * Start
+ */
+
+loadComponents();
